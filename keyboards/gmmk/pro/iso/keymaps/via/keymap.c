@@ -81,10 +81,20 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 #ifdef ENCODER_ENABLE
 bool encoder_update_user(uint8_t index, bool clockwise) {
-    if (clockwise) {
-        tap_code(KC_VOLU);
-    } else {
-        tap_code(KC_VOLD);
+    if (get_highest_layer(layer_state|default_layer_state) > 0) {
+        // Change brightness if not on the first layer
+        if (clockwise) {
+            tap_code(KC_BRIU);
+        } else {
+            tap_code(KC_BRID);
+        }
+    } else {  /* Layer 0 */
+        // change volume
+        if (clockwise) {
+            tap_code(KC_VOLU);
+        } else {
+            tap_code(KC_VOLD);
+        }
     }
     return true;
 }
